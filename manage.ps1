@@ -47,15 +47,29 @@ function ResetPassword()
 function Userinfo()
 {
     $username = Read-Host "Enter username"
-
     Get-ADUser -Identity "$username" -Properties *
 }
+
+function EnableUser()
+{
+    $username = Read-Host "Enter username"
+    Enable-ADAccount -Identity "$username"
+}
+
+function DisableUser()
+{
+    $username = Read-Host "Enter username"
+    Disable-ADAccount -Identity "$username"
+}
+
 
 Write-Host "Menu:"
 Write-Host "1 - Create new user"
 Write-Host "2 - Delete user"
 Write-Host "3 - Reset password user"
 Write-Host "4 - Get user info"
+Write-Host "5 - Enable user account"
+Write-Host "6 - Disable user account"
 
 $option = Read-Host "Enter the number"
 
@@ -71,6 +85,13 @@ elseif ($option -eq "3") {
 elseif ($option -eq "4") {
     Userinfo
 }
+elseif ($option -eq "5") {
+    EnableUser
+}
+elseif ($option -eq "6") {
+    DisableUser
+}
 else {
     Write-Host "Error"
 }
+
