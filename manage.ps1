@@ -1,12 +1,12 @@
 function CreateUser()
 {
-    $username = Read-Host "Enter username: "
-    $userpname = Read-Host "Enter principal username: "
-    $name = Read-Host "Enter name: "
-    $firstname = Read-Host "Enter first name: "
-    $lastname = Read-Host "Enter last name: "
-    $dname = Read-Host "Enter display name: "
-    $password = Read-Host "Enter password: "
+    $username = Read-Host "Enter username"
+    $userpname = Read-Host "Enter principal username"
+    $name = Read-Host "Enter name"
+    $firstname = Read-Host "Enter first name"
+    $lastname = Read-Host "Enter last name"
+    $dname = Read-Host "Enter display name"
+    $password = Read-Host "Enter password"
 
     New-ADuser  -SamAccountName "$username" `
                 -UserPrincipalName "$userpname" `
@@ -23,6 +23,9 @@ function CreateUser()
 
 function DeleteUser()
 {
+    $user = Read-Host "Enter username"
+
+    Remove-ADUser -Identity "$user"
     Write-Host "User deleted"
 }
 
@@ -38,9 +41,13 @@ Write-Host "3 - Reset password user"
 
 $option = Read-Host "Enter the number" 
 
-if ($option == 1)
+if ($option -eq "1") {
+    CreateUser
+}
+elseif($option -eq "2") {
+    DeleteUser
+}
+else {
+    Write-Host "Error"
+}
 
-$username = Read-Host "Enter name: "
-$password = Read-Host "Enter password: "
-
-Write-Host "User $username created with password: $password"
