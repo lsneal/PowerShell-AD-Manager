@@ -16,38 +16,61 @@ function CreateUser()
                 -DisplayName "$dname" `
                 -Enabled $true `
                 -PasswordNeverExpires $true `
-                -AccountPassword (ConvertTo-SecureString -AsPlainText "$password" -Force) `
+                -AccountPassword (ConvertTo-SecureString -AsPlainText "$password" -Force) ` 
                 -PassThru
     Write-Host "User created"
 }
 
 function DeleteUser()
 {
-    $user = Read-Host "Enter username"
+    $username = Read-Host "Enter username"
 
-    Remove-ADUser -Identity "$user"
+    Remove-ADUser -Identity "$username"
     Write-Host "User deleted"
 }
 
 function ResetPassword()
 {
-    Write-Host "Password Reset"        
+    # Get info password policy
+    Get-ADDefaultDomainPasswordPolicy
+
+    $username = Read-Host "Enter username"
+    $newpassword = Read-Host "Enter new password"
+
+    Set-ADAccountPassword   -Identity "$username" `
+                            -NewPassword (ConvertTo-SecureString "$newpassword" -AsPlainText
+ -Force) `
+                            -Reset
+    Write-Host "Password Reset"
+}
+
+function Userinfo()
+{
+    $username = Read-Host "Enter username"
+
+    Get-ADUser -Identity "$username" -Properties *
 }
 
 Write-Host "Menu:"
-Write-Host "1 - Create new user"       
+Write-Host "1 - Create new user"
 Write-Host "2 - Delete user"
-Write-Host "3 - Reset password user"   
+Write-Host "3 - Reset password user"
+Write-Host "4 - Get user info"
 
-$option = Read-Host "Enter the number" 
+$option = Read-Host "Enter the number"
 
 if ($option -eq "1") {
     CreateUser
 }
-elseif($option -eq "2") {
+elseif ($option -eq "2") {
     DeleteUser
+}
+elseif ($option -eq "3") {
+    ResetPassword
+}
+elseif ($option -eq "4") {
+    Userinfo
 }
 else {
     Write-Host "Error"
 }
-
