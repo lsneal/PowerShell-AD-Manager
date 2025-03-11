@@ -6,7 +6,14 @@ function CreateUser()
     $firstname = Read-Host "Enter first name"
     $lastname = Read-Host "Enter last name"
     $dname = Read-Host "Enter display name"
-    $password = Read-Host "Enter password"
+    
+    while (1) {
+        $password = Read-Host "Enter password"
+        if ($password -ge (Get-ADDefaultDomainPasswordPolicy).MinPasswordLength) {
+            break ;
+        }
+        Write-Host "Password Policy error"
+    }
 
     New-ADuser  -SamAccountName "$username" `
                 -UserPrincipalName "$userpname" `
@@ -61,7 +68,6 @@ function DisableUser()
     $username = Read-Host "Enter username"
     Disable-ADAccount -Identity "$username"
 }
-
 
 Write-Host "Menu:"
 Write-Host "1 - Create new user"
